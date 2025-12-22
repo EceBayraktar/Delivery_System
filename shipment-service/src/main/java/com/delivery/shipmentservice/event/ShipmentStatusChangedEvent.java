@@ -20,6 +20,7 @@ public class ShipmentStatusChangedEvent {
         this.status = status;
     }
 
+    // Getters
     public String getShipmentId() {
         return shipmentId;
     }
@@ -36,6 +37,7 @@ public class ShipmentStatusChangedEvent {
         return status;
     }
 
+    // Setters
     public void setShipmentId(String shipmentId) {
         this.shipmentId = shipmentId;
     }
@@ -51,5 +53,4 @@ public class ShipmentStatusChangedEvent {
     public void setStatus(String status) {
         this.status = status;
     }
-
 }

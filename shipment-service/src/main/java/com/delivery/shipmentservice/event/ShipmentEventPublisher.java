@@ -14,10 +14,14 @@ public class ShipmentEventPublisher {
     }
 
     public void publishStatusChanged(Shipment shipment) {
-        kafkaTemplate.send(
-                "shipment-status-topic",
-                shipment.getId().toString(),
-                shipment
-        );
+        ShipmentStatusChangedEvent event =
+                new ShipmentStatusChangedEvent(
+                        shipment.getId().toString(),      // UUID'yi String'e çevir
+                        shipment.getSender(),
+                        shipment.getReceiver(),
+                        shipment.getStatus().name()       // Enum'u String'e çevir
+                );
+
+        kafkaTemplate.send("shipment.status.changed", shipment.getId().toString(), event);
     }
 }
