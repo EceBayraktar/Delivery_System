@@ -18,12 +18,12 @@ public class ShipmentEventPublisher {
     public void publishStatusChanged(Shipment shipment) {
         ShipmentStatusChangedEvent event =
                 new ShipmentStatusChangedEvent(
-                        shipment.getId(),
+                        shipment.getId().toString(),      // UUID'yi String'e çevir
                         shipment.getSender(),
                         shipment.getReceiver(),
-                        shipment.getStatus()
+                        shipment.getStatus().name()       // Enum'u String'e çevir
                 );
 
-        kafkaTemplate.send("shipment.status.changed", shipment.getId(), event);
+        kafkaTemplate.send("shipment.status.changed", shipment.getId().toString(), event);
     }
 }
