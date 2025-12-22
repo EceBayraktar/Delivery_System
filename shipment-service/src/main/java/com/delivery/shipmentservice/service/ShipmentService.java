@@ -1,13 +1,13 @@
 package com.delivery.shipmentservice.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.delivery.shipmentservice.event.ShipmentEventPublisher;
 import com.delivery.shipmentservice.model.Shipment;
 import com.delivery.shipmentservice.model.ShipmentStatus;
 import com.delivery.shipmentservice.repository.ShipmentRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ShipmentService {
@@ -62,4 +62,5 @@ public class ShipmentService {
     public void deleteShipment(UUID id) {
         repository.deleteById(id);
     }
+
 }
