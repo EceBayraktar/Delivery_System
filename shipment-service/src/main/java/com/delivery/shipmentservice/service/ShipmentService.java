@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.delivery.shipmentservice.event.ShipmentEventPublisher;
 import com.delivery.shipmentservice.model.Shipment;
+import com.delivery.shipmentservice.model.ShipmentStatus;
 import com.delivery.shipmentservice.repository.ShipmentRepository;
 
 @Service
@@ -23,28 +24,42 @@ public class ShipmentService {
         return repository.findAll();
     }
 
-    public Shipment getById(String id) {
-        return repository.findById(id).orElse(null);
+    public Shipment getById(UUID id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Shipment not found"));
     }
 
-    public Shipment createShipment(Shipment shipment) {
-        shipment.setStatus("CREATED");
-        return repository.save(shipment);
+    public Shipment createShipment(String sender, String receiver) {
+        Shipment shipment = new Shipment(sender, receiver);
+        shipment.setId(UUID.randomUUID());
+
+        Shipment saved = repository.save(shipment);
+
+        // Kafka event (CREATED)
+        publisher.publishStatusChanged(
+                saved.getId().toString(),
+                saved.getStatus().name()
+        );
+
+        return saved;
     }
 
-    public Shipment updateStatus(String id, String status) {
+    public Shipment updateStatus(UUID id, ShipmentStatus status) {
         Shipment shipment = getById(id);
-        if (shipment != null) {
-            shipment.setStatus(status);
-            repository.save(shipment);
+        shipment.setStatus(status);
 
-            // Kafka event gönder
-            publisher.publishStatusChanged(shipment);
-        }
-        return shipment;
+        Shipment updated = repository.save(shipment);
+
+        // Kafka event
+        publisher.publishStatusChanged(
+                id.toString(),
+                status.name()
+        );
+
+        return updated;
     }
 
-    public void deleteShipment(String id) {
+    public void deleteShipment(UUID id) {
         repository.deleteById(id);
     }
 
