@@ -26,6 +26,11 @@ spring:
             - Path=/couriers/**
           filters:
             - AuthenticationFilter
+         
+        - id: notification-service
+          uri: http://notification-service:8082
+          predicates:
+            - Path=/notifications/**
 
 jwt:
   secret: my-super-secret-key-that-is-at-least-thirty-two-bytes-long
