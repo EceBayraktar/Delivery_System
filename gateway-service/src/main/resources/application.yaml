@@ -8,7 +8,24 @@ spring:
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: http://auth-service:8084
+          predicates:
+            - Path=/auth/**
+
         - id: shipment-service
           uri: http://shipment-service:8081
           predicates:
             - Path=/shipments/**
+          filters:
+            - AuthenticationFilter
+
+        - id: courier-service
+          uri: http://courier-service:8083
+          predicates:
+            - Path=/couriers/**
+          filters:
+            - AuthenticationFilter
+
+jwt:
+  secret: my-super-secret-key-that-is-at-least-thirty-two-bytes-long
