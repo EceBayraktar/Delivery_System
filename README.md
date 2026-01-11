@@ -2,14 +2,12 @@
 
 Bu proje, **sipariş – kurye – teslimat** süreçlerini yöneten, **Spring Boot tabanlı mikroservis mimarisi** ile geliştirilmiş bir **Delivery (Teslimat) Yönetim Sistemi**dir.
 
-Projeyi ilk kez gören birinin sistemi anlayabilmesi ve **adım adım çalıştırabilmesi** hedeflenmiştir.
-
 ---
 
 ## 🧠 Genel Mimari
 
 Proje **microservices architecture** kullanır.  
-Her servis bağımsızdır, kendi veritabanına sahiptir ve REST API üzerinden haberleşir.
+Her servis bağımsızdır, kendi veritabanına sahiptir ve REST API üzerinden haberleşir. Sipariş durumu değiştiğinde veya siprişe bir kurye atandığında notification service db ye ve kafka uı a bildiirm gönderilir. pgadmin üzeirnden ve kafka ui üzerinden görüntüleyebilirsiniz.
 
 Client
 |
@@ -22,8 +20,7 @@ API Gateway
 ## 📦 Servisler
 
 ### 🔐 auth-service
-- Kullanıcı kimlik doğrulama
-- JWT tabanlı authentication & authorization
+- Kullanıcı girişi 
 
 ### 📦 order-service
 - Sipariş oluşturma
@@ -61,6 +58,8 @@ API Gateway
 - Kubernetes
 - Maven
 - Postman
+- Kafka
+- Cloud
 
 ---
 
@@ -105,6 +104,8 @@ Order Service	8082
 Courier Service	8083
 Shipment Service	8084
 Notification Service	8085
+Kafka UI 9092
+Pgadmin 5050
 
 
 📬 API Kullanımı
@@ -117,7 +118,7 @@ Tüm istekler API Gateway üzerinden yapılır.
 POST   /api/orders
 GET    /api/couriers
 PUT    /api/shipments/{id}/status
-
+```
 
 🧩 Kurye Atama Mantığı (Özet)
 
@@ -141,17 +142,10 @@ Config dosyaları bulunmaktadır
 
 Çalıştırmak için:
 ```bash
-
 kubectl apply -f k8s/
-
+```
 🧪 Geliştirme Notları
 
 Her servis kendi veritabanına sahiptir
-
-Servisler loosely-coupled tasarlanmıştır
-
-Cloud-native mimariye uygundur
-
 Yeni servis eklemek kolaydır
 
-👩‍💻 Geliştirici
