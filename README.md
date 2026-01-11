@@ -84,17 +84,17 @@ API Gateway
 ```bash
 git clone https://github.com/EceBayraktar/Delivery_System.git
 cd Delivery_System
-
+```
 
 2️⃣ Servisleri ayağa kaldırın:
-
+```bash
 docker compose up --build
-
+```
 
 3️⃣ Tüm servisler çalıştığında API Gateway üzerinden erişebilirsiniz:
-
+```bash
 http://localhost:8888
-
+```
 
 
 🔌 Varsayılan Portlar
