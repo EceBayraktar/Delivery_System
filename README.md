@@ -1,157 +1,131 @@
-🚚 Delivery System – Microservices Architecture
+# 🚚 Delivery System – Microservices Architecture
 
-Bu proje, sipariş – kurye – teslimat süreçlerini yöneten, Spring Boot tabanlı mikroservis mimarisi ile geliştirilmiş bir Delivery (Teslimat) Yönetim Sistemidir.
+Bu proje, **sipariş – kurye – teslimat** süreçlerini yöneten, **Spring Boot tabanlı mikroservis mimarisi** ile geliştirilmiş bir **Delivery (Teslimat) Yönetim Sistemi**dir.
 
-Sistem; sipariş oluşturma, uygun kuryeye otomatik atama, teslimat durumlarının güncellenmesi ve servisler arası iletişimi kapsar.
+Projeyi ilk kez gören birinin sistemi anlayabilmesi ve **adım adım çalıştırabilmesi** hedeflenmiştir.
 
-🧠 Sistem Mimarisi
+---
 
-Proje microservices architecture kullanır.
+## 🧠 Genel Mimari
+
+Proje **microservices architecture** kullanır.  
 Her servis bağımsızdır, kendi veritabanına sahiptir ve REST API üzerinden haberleşir.
 
 Client
-   |
+|
 API Gateway
-   |
-------------------------------------------------
-| Auth | Order | Shipment | Courier | Notification |
-------------------------------------------------
+|
+| Auth | Order | Courier | Shipment | Notification |
 
-📦 Servisler
-🔐 auth-service
+---
 
-Kullanıcı kimlik doğrulama
+## 📦 Servisler
 
-JWT tabanlı authentication & authorization
+### 🔐 auth-service
+- Kullanıcı kimlik doğrulama
+- JWT tabanlı authentication & authorization
 
-📦 order-service
+### 📦 order-service
+- Sipariş oluşturma
+- Sipariş durum yönetimi
+- Kurye atama sürecini başlatır
 
-Sipariş oluşturma
+### 🚚 courier-service
+- Kurye bilgileri
+- Kurye uygunluk ve yoğunluk durumu
+- En az yoğun kuryenin seçilmesi
 
-Sipariş durum yönetimi
+### 📮 shipment-service
+- Teslimat süreci
+- Sipariş → Kurye → Teslim edildi akışı
+- Teslimat durum güncellemeleri
 
-Kurye atama sürecini başlatır
+### 🔔 notification-service
+- Sipariş ve teslimat bildirimleri
+- Event tabanlı bildirim altyapısı
 
-🚚 courier-service
+### 🌐 api-gateway
+- Tüm servisler için tek giriş noktası
+- Request yönlendirme ve routing
 
-Kurye bilgileri
+---
 
-Kurye uygunluk ve yoğunluk durumu
+## 🛠 Kullanılan Teknolojiler
 
-En az yoğun kuryenin seçilmesi
+- Java 21
+- Spring Boot
+- Spring Cloud Gateway
+- Spring Data JPA
+- PostgreSQL
+- Docker & Docker Compose
+- Kubernetes
+- Maven
+- Postman
 
-📮 shipment-service
+---
 
-Teslimat süreci
+---
 
-Sipariş → Kurye → Teslim edildi akışı
+## 🚀 Projeyi Çalıştırma
 
-Teslimat durum güncellemeleri
+### ✅ Gereksinimler
 
-🔔 notification-service
+- Java 21
+- Docker & Docker Compose
+- Maven
 
-Sipariş / teslimat bildirimleri
+> PostgreSQL Docker container olarak otomatik ayağa kalkar.
 
-Event tabanlı bildirim altyapısı
+---
 
-🌐 api-gateway
+### ▶️ Docker Compose ile Çalıştırma (Önerilen)
 
-Tüm servisler için tek giriş noktası
-
-Route ve request yönlendirme
-
-🛠 Kullanılan Teknolojiler
-
-Java 21
-
-Spring Boot
-
-Spring Cloud Gateway
-
-Spring Data JPA
-
-PostgreSQL
-
-Docker & Docker Compose
-
-Kubernetes (k8s)
-
-Maven
-
-Postman
-
-📁 Proje Yapısı
-Delivery_System/
-│
-├── auth-service/
-├── order-service/
-├── courier-service/
-├── shipment-service/
-├── notification-service/
-├── api-gateway/
-│
-├── k8s/                # Kubernetes deployment & service yaml'ları
-├── docker-compose.yml
-├── pom.xml
-└── README.md
-
-🚀 Projeyi Çalıştırma
-✅ Gereksinimler
-
-Java 21
-
-Docker & Docker Compose
-
-Maven
-
-PostgreSQL (Docker ile otomatik gelir)
-
-▶️ Docker Compose ile Çalıştırma (ÖNERİLEN)
-
-1️⃣ Projeyi klonla:
-
+1️⃣ Projeyi klonlayın:
+```bash
 git clone https://github.com/EceBayraktar/Delivery_System.git
 cd Delivery_System
 
 
-2️⃣ Servisleri ayağa kaldır:
+2️⃣ Servisleri ayağa kaldırın:
 
 docker compose up --build
 
 
-3️⃣ Servisler hazır 🎉
-API Gateway üzerinden erişebilirsin:
+3️⃣ Tüm servisler çalıştığında API Gateway üzerinden erişebilirsiniz:
 
-http://localhost:8080
+http://localhost:8888
 
-🔌 Portlar (Varsayılan)
+
+
+🔌 Varsayılan Portlar
 Servis	Port
-API Gateway	8080
+API Gateway	8888
 Auth Service	8081
 Order Service	8082
 Courier Service	8083
 Shipment Service	8084
 Notification Service	8085
+
+
 📬 API Kullanımı
 
-Tüm istekler API Gateway üzerinden geçer.
+Tüm istekler API Gateway üzerinden yapılır.
 
-Örnek:
+Örnek endpointler:
+```bash
 
-POST /api/orders
-GET  /api/couriers
-PUT  /api/shipments/{id}/status
+POST   /api/orders
+GET    /api/couriers
+PUT    /api/shipments/{id}/status
 
-
-Test için Postman collection kullanılabilir.
 
 🧩 Kurye Atama Mantığı (Özet)
 
-Aktif kuryeler kontrol edilir
+Aktif ve müsait kuryeler kontrol edilir
 
 En az teslimatı olan kurye seçilir
 
-Kurye müsait değilse hata döner
+Uygun kurye yoksa hata döndürülür
 
 Atanan kurye ID’si siparişe yazılır
 
@@ -163,16 +137,21 @@ Deployment
 
 Service
 
-Config dosyaları bulunmaktadır.
+Config dosyaları bulunmaktadır
+
+Çalıştırmak için:
+```bash
 
 kubectl apply -f k8s/
 
 🧪 Geliştirme Notları
 
-Her servis kendi DB’sine sahiptir
+Her servis kendi veritabanına sahiptir
 
 Servisler loosely-coupled tasarlanmıştır
 
+Cloud-native mimariye uygundur
+
 Yeni servis eklemek kolaydır
 
-Cloud-native yapıya uygundur
+👩‍💻 Geliştirici
