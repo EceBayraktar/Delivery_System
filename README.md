@@ -138,7 +138,7 @@ Deployment
 
 Service
 
-Config dosyaları bulunmaktadır
+Config dosyaları bulunmaktadır.
 
 Çalıştırmak için:
 ```bash
@@ -146,6 +146,7 @@ kubectl apply -f k8s/
 ```
 🧪 Geliştirme Notları
 
-Her servis kendi veritabanına sahiptir
+Her servis kendi veritabanına sahiptir.
+
 Yeni servis eklemek kolaydır
 
